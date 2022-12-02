@@ -46,6 +46,8 @@ mod tests {
     \n\
     10000\n";
 
+    const PUZZLE_INPUT: &str = include_str!("../input/2022/day1.txt");
+
     #[test]
     fn part1_example() {
         assert_eq!(part1(EXAMPLE_INTPUT), 24_000);
@@ -54,5 +56,15 @@ mod tests {
     #[test]
     fn part2_example() {
         assert_eq!(part2(EXAMPLE_INTPUT), 45_000);
+    }
+
+    #[test]
+    fn part1_solution() {
+        assert_eq!(part1(PUZZLE_INPUT), 66_616);
+    }
+
+    #[test]
+    fn part2_solution() {
+        assert_eq!(part2(PUZZLE_INPUT), 19_9172);
     }
 }
