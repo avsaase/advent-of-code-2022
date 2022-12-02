@@ -48,9 +48,20 @@ impl FromStr for &Action {
     }
 }
 
+impl From<u8> for Action {
+    fn from(x: u8) -> Self {
+        match x {
+            0 => Action::Rock,
+            1 => Action::Paper,
+            2 => Action::Scissors,
+            _ => unreachable!(),
+        }
+    }
+}
+
 enum Outcome {
-    Win,
     Draw,
+    Win,
     Loss,
 }
 
@@ -68,16 +79,14 @@ impl FromStr for &Outcome {
 }
 
 fn calculate_outcome(their_action: &Action, my_action: &Action) -> Outcome {
-    match (their_action, my_action) {
-        (Action::Rock, Action::Rock) => Outcome::Draw,
-        (Action::Rock, Action::Paper) => Outcome::Win,
-        (Action::Rock, Action::Scissors) => Outcome::Loss,
-        (Action::Paper, Action::Rock) => Outcome::Loss,
-        (Action::Paper, Action::Paper) => Outcome::Draw,
-        (Action::Paper, Action::Scissors) => Outcome::Win,
-        (Action::Scissors, Action::Rock) => Outcome::Win,
-        (Action::Scissors, Action::Paper) => Outcome::Loss,
-        (Action::Scissors, Action::Scissors) => Outcome::Draw,
+    let their_action_idx = *their_action as u8;
+    let my_action_idx = *my_action as u8;
+    if my_action_idx == (their_action_idx + 1) % 3 {
+        Outcome::Win
+    } else if my_action_idx == their_action_idx {
+        Outcome::Draw
+    } else {
+        Outcome::Loss
     }
 }
 
@@ -104,17 +113,10 @@ fn points_for_match(their_action: &Action, my_action: &Action) -> u64 {
 }
 
 fn action_for_outcome(their_action: &Action, outcome: &Outcome) -> Action {
-    match (their_action, outcome) {
-        (Action::Rock, Outcome::Win) => Action::Paper,
-        (Action::Rock, Outcome::Draw) => Action::Rock,
-        (Action::Rock, Outcome::Loss) => Action::Scissors,
-        (Action::Paper, Outcome::Win) => Action::Scissors,
-        (Action::Paper, Outcome::Draw) => Action::Paper,
-        (Action::Paper, Outcome::Loss) => Action::Rock,
-        (Action::Scissors, Outcome::Win) => Action::Rock,
-        (Action::Scissors, Outcome::Draw) => Action::Scissors,
-        (Action::Scissors, Outcome::Loss) => Action::Paper,
-    }
+    let their_action_idx = *their_action as u8;
+    let outcome_idx = *outcome as u8;
+    let my_action = (their_action_idx + outcome_idx) % 3;
+    my_action.into()
 }
 
 #[cfg(test)]
@@ -126,6 +128,8 @@ mod tests {
     B X\n\
     C Z\n";
 
+    const PUZZLE_INPUT: &str = include_str!("../input/2022/day2.txt");
+
     #[test]
     fn part1_example() {
         assert_eq!(part1(EXAMPLE_INPUT), 15);
@@ -134,5 +138,15 @@ mod tests {
     #[test]
     fn part2_example() {
         assert_eq!(part2(EXAMPLE_INPUT), 12);
+    }
+
+    #[test]
+    fn part1_solution() {
+        assert_eq!(part1(PUZZLE_INPUT), 13565);
+    }
+
+    #[test]
+    fn part2_solution() {
+        assert_eq!(part2(PUZZLE_INPUT), 12424);
     }
 }
