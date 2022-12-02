@@ -1,0 +1,11 @@
+[package]
+name = "advent-of-code-2022"
+version = "0.1.0"
+edition = "2021"
+authors = ["Alexander van Saase"]
+
+[dependencies]
+anyhow = "1.0.66"
+aoc-runner = "0.3.0"
+aoc-runner-derive = "0.3.0"
+itertools = "0.10.5"
