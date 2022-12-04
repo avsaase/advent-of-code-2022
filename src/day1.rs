@@ -44,7 +44,7 @@ mod tests {
     8000\n\
     9000\n\
     \n\
-    10000\n";
+    10000";
 
     const PUZZLE_INPUT: &str = include_str!("../input/2022/day1.txt");
 

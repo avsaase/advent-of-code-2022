@@ -53,7 +53,8 @@ fn common_chars(a: &str, b: &str) -> Vec<char> {
 mod tests {
     use super::*;
 
-    const EXAMPLE_INPUT: &str = "vJrwpWtwJgWrhcsFMMfFFhFp\n\
+    const EXAMPLE_INPUT: &str = "\
+    vJrwpWtwJgWrhcsFMMfFFhFp\n\
     jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\n\
     PmmdzqPrVvPwwTWBwg\n\
     wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\n\

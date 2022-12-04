@@ -128,7 +128,7 @@ mod tests {
     const EXAMPLE_INPUT: &str = "\
     A Y\n\
     B X\n\
-    C Z\n";
+    C Z";
 
     const PUZZLE_INPUT: &str = include_str!("../input/2022/day2.txt");
 
