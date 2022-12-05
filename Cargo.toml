@@ -8,4 +8,6 @@ authors = ["Alexander van Saase"]
 anyhow = "1.0.66"
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
+indoc = "1.0.7"
 itertools = "0.10.5"
+parse-display = "0.6.0"
