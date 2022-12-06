@@ -3,19 +3,18 @@ use itertools::Itertools;
 
 #[aoc(day6, part1)]
 fn part1(input: &str) -> u64 {
-    for (idx, (a, b, c, d)) in input.chars().tuple_windows::<(_, _, _, _)>().enumerate() {
-        if [a, b, c, d].iter().unique().count() == 4 {
-            return (idx + 4) as u64;
-        }
-    }
-    panic!("Should have found solution");
+    find_marker_index(input, 4)
 }
 
 #[aoc(day6, part2)]
 fn part2(input: &str) -> u64 {
-    for (idx, slice) in input.as_bytes().windows(14).enumerate() {
-        if slice.iter().unique().count() == 14 {
-            return (idx + 14) as u64;
+    find_marker_index(input, 14)
+}
+
+fn find_marker_index(input: &str, marker_length: u8) -> u64 {
+    for (idx, slice) in input.as_bytes().windows(marker_length as usize).enumerate() {
+        if slice.iter().unique().count() == marker_length as usize {
+            return (idx + marker_length as usize) as u64;
         }
     }
     panic!("Should have found solution");
