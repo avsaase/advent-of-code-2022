@@ -1,22 +1,21 @@
 use aoc_runner_derive::{aoc, aoc_generator};
-use itertools::Itertools;
 use parse_display::{Display, FromStr};
 
 #[aoc_generator(day5)]
-fn parse_input(input: &str) -> (Stacks, Vec<Move>) {
+fn parse_input(input: &str) -> (Vec<Stack>, Vec<Move>) {
     let (stacks, moves) = input.split_once("\n\n").unwrap();
 
     // Parse initial stacks
-    let mut initial_stacks = Stacks(Vec::new());
+    let mut initial_stacks = Vec::new();
     for line in stacks.lines().rev().skip(1) {
         for (i, c) in line.chars().enumerate() {
             if c.is_alphabetic() {
                 let stack_idx = i / 4;
-                if initial_stacks.0.get(stack_idx).is_none() {
-                    initial_stacks.0.push(Stack(Vec::new()));
+                if initial_stacks.get(stack_idx).is_none() {
+                    initial_stacks.push(Vec::new());
                 }
-                if let Some(stack) = initial_stacks.0.get_mut(stack_idx) {
-                    stack.0.push(Crate(c));
+                if let Some(stack) = initial_stacks.get_mut(stack_idx) {
+                    stack.push(c);
                 }
             }
         }
@@ -32,87 +31,72 @@ fn parse_input(input: &str) -> (Stacks, Vec<Move>) {
 }
 
 #[aoc(day5, part1)]
-fn part1(input: &(Stacks, Vec<Move>)) -> String {
+fn part1(input: &(Vec<Stack>, Vec<Move>)) -> String {
     let (stacks, moves) = input;
     let mut stacks = stacks.clone();
 
     for move_ in moves {
-        stacks.move_crates_one_by_one(move_);
+        move_crates_one_by_one(&mut stacks, move_);
     }
 
-    stacks.get_top_crates()
+    get_top_crates(&stacks)
 }
 
 #[aoc(day5, part2)]
-fn part2(input: &(Stacks, Vec<Move>)) -> String {
+fn part2(input: &(Vec<Stack>, Vec<Move>)) -> String {
     let (stacks, moves) = input;
     let mut stacks = stacks.clone();
 
     for move_ in moves {
-        stacks.move_crates_all_at_once(move_);
+        move_crates_all_at_once(&mut stacks, move_);
     }
 
-    stacks.get_top_crates()
+    get_top_crates(&stacks)
 }
 
-#[derive(Debug, PartialEq, Clone)]
-struct Stack(Vec<Crate>);
+type Stack = Vec<Crate>;
+type Crate = char;
 
-#[derive(Debug, PartialEq, Clone)]
-struct Stacks(Vec<Stack>);
+fn move_crates_one_by_one<'a>(stacks: &'a mut Vec<Stack>, move_: &'a Move) -> &'a mut Vec<Stack> {
+    let (amount, from, to) = (
+        move_.amount as usize,
+        move_.from as usize,
+        move_.to as usize,
+    );
 
-impl Stacks {
-    fn move_crates_one_by_one(&mut self, move_: &Move) -> &mut Self {
-        let (amount, from, to) = (
-            move_.amount as usize,
-            move_.from as usize,
-            move_.to as usize,
-        );
-
-        for _ in 0..amount {
-            let crate_ = self.0.get_mut(from - 1).unwrap().0.pop().unwrap();
-            self.0.get_mut(to - 1).unwrap().0.push(crate_);
-        }
-        self
+    for _ in 0..amount {
+        let crate_ = stacks.get_mut(from - 1).unwrap().pop().unwrap();
+        stacks.get_mut(to - 1).unwrap().push(crate_);
     }
-
-    fn move_crates_all_at_once(&mut self, move_: &Move) -> &mut Self {
-        let (amount, from, to) = (
-            move_.amount as usize,
-            move_.from as usize,
-            move_.to as usize,
-        );
-
-        let from_len = self.0.get(from - 1).unwrap().0.len();
-
-        let mut crates_to_move = self
-            .0
-            .get_mut(from - 1)
-            .unwrap()
-            .0
-            .drain((from_len - amount)..)
-            .collect_vec();
-
-        self.0
-            .get_mut(to - 1)
-            .unwrap()
-            .0
-            .append(&mut crates_to_move);
-
-        self
-    }
-
-    fn get_top_crates(&self) -> String {
-        self.0
-            .clone()
-            .into_iter()
-            .map(|c| c.0.last().unwrap().0)
-            .collect::<String>()
-    }
+    stacks
 }
 
-#[derive(PartialEq, Debug, Clone)]
-struct Crate(char);
+fn move_crates_all_at_once<'a>(stacks: &'a mut Vec<Stack>, move_: &'a Move) -> &'a mut Vec<Stack> {
+    let (amount, from, to) = (
+        move_.amount as usize,
+        move_.from as usize,
+        move_.to as usize,
+    );
+
+    let from_len = stacks.get(from - 1).unwrap().len();
+
+    let mut crates_to_move = stacks
+        .get_mut(from - 1)
+        .unwrap()
+        .split_off(from_len - amount);
+
+    stacks.get_mut(to - 1).unwrap().append(&mut crates_to_move);
+
+    stacks
+}
+
+fn get_top_crates(stacks: &Vec<Stack>) -> String {
+    stacks
+        .clone()
+        .into_iter()
+        .map(|c| c.last().unwrap().to_owned())
+        .collect::<String>()
+}
 
 #[derive(Display, FromStr, PartialEq, Debug)]
 #[display("move {amount} from {from} to {to}")]
@@ -143,10 +127,10 @@ mod tests {
 
     #[test]
     fn parse_initial_stacks_example() {
-        let first_stack = Stack(vec![Crate('Z'), Crate('N')]);
-        let second_stack = Stack(vec![Crate('M'), Crate('C'), Crate('D')]);
-        let third_stack = Stack(vec![Crate('P')]);
-        let stacks = Stacks(vec![first_stack, second_stack, third_stack]);
+        let first_stack = vec!['Z', 'N'];
+        let second_stack = vec!['M', 'C', 'D'];
+        let third_stack = vec!['P'];
+        let stacks = vec![first_stack, second_stack, third_stack];
         let (initial_stacks, _) = parse_input(EXAMPLE_INPUT);
         assert_eq!(initial_stacks, stacks);
     }
