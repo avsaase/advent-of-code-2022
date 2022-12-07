@@ -7,7 +7,7 @@ fn part1(input: &str) -> u64 {
     input
         .lines()
         .map(|l| {
-            let line = l.split_once(" ").unwrap();
+            let line = l.split_once(' ').unwrap();
             let their_action = line.0.parse().unwrap();
             let my_action = line.1.parse().unwrap();
             points_for_match(&their_action, &my_action)
@@ -20,7 +20,7 @@ fn part2(input: &str) -> u64 {
     input
         .lines()
         .map(|l| {
-            let line = l.split_once(" ").unwrap();
+            let line = l.split_once(' ').unwrap();
             let their_action = line.0.parse::<Action>().unwrap();
             let desired_outcome = line.1.parse().unwrap();
             let my_action = action_for_outcome(&their_action, &desired_outcome);
@@ -109,7 +109,7 @@ fn points_for_outcome(outcome: &Outcome) -> u64 {
 }
 
 fn points_for_match(their_action: &Action, my_action: &Action) -> u64 {
-    let poits_for_action = points_for_action(&my_action);
+    let poits_for_action = points_for_action(my_action);
     let poits_for_result = points_for_outcome(&calculate_outcome(their_action, my_action));
     poits_for_action + poits_for_result
 }

@@ -10,7 +10,7 @@ fn part1(input: &str) -> u64 {
     input
         .lines()
         .map(|pair| {
-            let (one, two) = pair.split_once(",").unwrap();
+            let (one, two) = pair.split_once(',').unwrap();
             let one = one.parse().unwrap();
             let two = two.parse().unwrap();
             does_range_include_other(&one, &two)
@@ -24,7 +24,7 @@ fn part2(input: &str) -> u64 {
     input
         .lines()
         .map(|pair| {
-            let (one, two) = pair.split_once(",").unwrap();
+            let (one, two) = pair.split_once(',').unwrap();
             let one = one.parse().unwrap();
             let two = two.parse().unwrap();
             do_ranges_overlap(&one, &two)
@@ -50,7 +50,7 @@ impl FromStr for Range {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (min, max) = s.split_once("-").unwrap();
+        let (min, max) = s.split_once('-').unwrap();
         Ok(Self {
             min: min.parse().unwrap(),
             max: max.parse().unwrap(),

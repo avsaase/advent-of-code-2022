@@ -90,10 +90,10 @@ fn move_crates_all_at_once<'a>(stacks: &'a mut Vec<Stack>, move_: &'a Move) -> &
     stacks
 }
 
-fn get_top_crates(stacks: &Vec<Stack>) -> String {
+fn get_top_crates(stacks: &[Stack]) -> String {
     stacks
-        .clone()
-        .into_iter()
+        .to_owned()
+        .iter()
         .map(|c| c.last().unwrap().to_owned())
         .collect::<String>()
 }
