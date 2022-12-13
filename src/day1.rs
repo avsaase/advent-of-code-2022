@@ -8,22 +8,13 @@ pub fn part1(input: &str) -> u64 {
 
 #[aoc(day1, part2)]
 pub fn part2(input: &str) -> u64 {
-    calories_per_elf(input)
-        .into_iter()
-        .sorted()
-        .rev()
-        .take(3)
-        .sum::<u64>()
+    calories_per_elf(input).into_iter().sorted().rev().take(3).sum::<u64>()
 }
 
 fn calories_per_elf(input: &str) -> Vec<u64> {
     input
         .split("\n\n")
-        .map(|elf| {
-            elf.lines()
-                .map(|line| line.parse::<u64>().unwrap())
-                .sum::<u64>()
-        })
+        .map(|elf| elf.lines().map(|line| line.parse::<u64>().unwrap()).sum::<u64>())
         .collect_vec()
 }
 

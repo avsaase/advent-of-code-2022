@@ -23,11 +23,7 @@ fn part2(input: &str) -> u64 {
         .map(|(a, b, c)| {
             let ab = common_chars(a, b);
             let ac = common_chars(a, c);
-            let abc = ab
-                .iter()
-                .filter(|ab_char| ac.contains(ab_char))
-                .unique()
-                .collect_vec();
+            let abc = ab.iter().filter(|ab_char| ac.contains(ab_char)).unique().collect_vec();
             item_priority(**abc.first().unwrap())
         })
         .sum()
@@ -35,18 +31,15 @@ fn part2(input: &str) -> u64 {
 
 fn item_priority(item: char) -> u64 {
     const CHARS: [char; 52] = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-        's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+        'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ];
     CHARS.iter().position(|i| i == &item).unwrap() as u64 + 1
 }
 
 fn common_chars(a: &str, b: &str) -> Vec<char> {
-    a.chars()
-        .filter(|ac| b.chars().contains(ac))
-        .unique()
-        .collect_vec()
+    a.chars().filter(|ac| b.chars().contains(ac)).unique().collect_vec()
 }
 
 #[cfg(test)]

@@ -58,11 +58,7 @@ type Stack = Vec<Crate>;
 type Crate = char;
 
 fn move_crates_one_by_one<'a>(stacks: &'a mut Vec<Stack>, move_: &'a Move) -> &'a mut Vec<Stack> {
-    let (amount, from, to) = (
-        move_.amount as usize,
-        move_.from as usize,
-        move_.to as usize,
-    );
+    let (amount, from, to) = (move_.amount as usize, move_.from as usize, move_.to as usize);
 
     for _ in 0..amount {
         let crate_ = stacks.get_mut(from - 1).unwrap().pop().unwrap();
@@ -72,18 +68,11 @@ fn move_crates_one_by_one<'a>(stacks: &'a mut Vec<Stack>, move_: &'a Move) -> &'
 }
 
 fn move_crates_all_at_once<'a>(stacks: &'a mut Vec<Stack>, move_: &'a Move) -> &'a mut Vec<Stack> {
-    let (amount, from, to) = (
-        move_.amount as usize,
-        move_.from as usize,
-        move_.to as usize,
-    );
+    let (amount, from, to) = (move_.amount as usize, move_.from as usize, move_.to as usize);
 
     let from_len = stacks.get(from - 1).unwrap().len();
 
-    let mut crates_to_move = stacks
-        .get_mut(from - 1)
-        .unwrap()
-        .split_off(from_len - amount);
+    let mut crates_to_move = stacks.get_mut(from - 1).unwrap().split_off(from_len - amount);
 
     stacks.get_mut(to - 1).unwrap().append(&mut crates_to_move);
 

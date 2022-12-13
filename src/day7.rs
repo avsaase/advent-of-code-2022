@@ -50,13 +50,7 @@ fn part2(dir_sizes: &HashMap<String, u64>) -> u64 {
     let space_to_clear = required_free_space - current_free_space;
     dir_sizes
         .iter()
-        .filter_map(|(_, &size)| {
-            if size >= space_to_clear {
-                Some(size)
-            } else {
-                None
-            }
-        })
+        .filter_map(|(_, &size)| if size >= space_to_clear { Some(size) } else { None })
         .min()
         .unwrap()
 }

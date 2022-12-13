@@ -88,9 +88,8 @@ fn compare_vec(a: &Vec<Data>, b: &Vec<Data>) -> Option<Ordering> {
 
 #[cfg(test)]
 mod tests {
-    use indoc::indoc;
-
     use super::*;
+    use indoc::indoc;
 
     const EXAMPLE_INPUT: &str = indoc! {"
         [1,1,3,1,1]
